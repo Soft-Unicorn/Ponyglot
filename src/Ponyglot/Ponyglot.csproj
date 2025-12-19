@@ -1,0 +1,74 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Compilation">
+    <Nullable>enable</Nullable>
+    <Deterministic>true</Deterministic>
+    <AnalysisMode>All</AnalysisMode>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup Label="Compilation">
+    <AssemblyAttribute Include="CLSCompliantAttribute">
+      <_Parameter1>true</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  
+  <PropertyGroup Label="Packaging">
+    <IncludeSymbols>true</IncludeSymbols>
+    <DebugType>embedded</DebugType>
+    <EmbedAllSources>true</EmbedAllSources>
+    <DevelopmentDependency>true</DevelopmentDependency>
+  </PropertyGroup>
+  
+  <PropertyGroup Label="Packaging Metadata">
+    <Authors>Damien Braillard</Authors>
+    <Company>Soft Unicorn Sàrl</Company>
+    <Product>Trackr</Product>
+    <Description>Modern gettext for .NET — plural-aware, PO-friendly, and designed for code-driven localization.</Description>
+    <Copyright>Copyright © $(Company) 2025</Copyright>
+    <Copyright Condition="$([System.DateTime]::Now.Year) > 2025">$(Copyright)-$([System.DateTime]::Now.Year)</Copyright>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>nuget;package;i18n;localization;gettext;plural</PackageTags>
+    <PackageProjectUrl>https://github.com/Soft-Unicorn/Ponyglot</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/Soft-Unicorn/Ponyglot/blob/main/CHANGELOG.md</PackageReleaseNotes>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup Label="Packaging Metadata">
+    <None Include="../../resources/$(PackageIcon)" Pack="true" PackagePath="" Visible="false" />
+    <None Include="../../$(PackageReadmeFile)" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <PropertyGroup Label="Versioning">
+    <MinVerMinimumMajorMinor>0.0</MinVerMinimumMajorMinor>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Restore">
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <!-- https://devblogs.microsoft.com/nuget/enable-repeatable-package-restores-using-a-lock-file/#how-does-nuget-use-the-lock-file -->
+    <RestoreLockedMode Condition="$(ContinuousIntegrationBuild) == 'true'">true</RestoreLockedMode>
+  </PropertyGroup>
+
+  <ItemGroup Label="Restore">
+    <None Update="packages.lock.json" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup Label="Testing">
+    <InternalsVisibleTo Include="Ponyglot.Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+    <PackageReference Include="MinVer" Version="6.0.0" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

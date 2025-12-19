@@ -1,0 +1,7 @@
+﻿{
+  "$schema": "https://xunit.net/schema/v3/config.schema.json",
+  "parallelizeAssembly": true,
+  "maxParallelThreads": 0,
+  "diagnosticMessages": true,
+  "showLiveOutput": true
+}
