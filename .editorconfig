@@ -1,0 +1,10 @@
+root = true
+
+# Always use LF as end of line
+[*]
+end_of_line = lf
+charset = utf-8
+
+[*.cs]
+# https://youtrack.jetbrains.com/issue/RSRP-463998/Support-assembly-level-SuppressMessage-attribute#focus=Comments-27-4746551.0-0
+resharper_convert_to_primary_constructor_highlighting = None
