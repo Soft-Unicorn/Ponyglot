@@ -1,0 +1,10 @@
+# Development
+*.user
+bin/
+obj/
+.idea/
+.vs/
+*.user
+
+# Temp office files
+~$*

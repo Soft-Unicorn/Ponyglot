@@ -1,0 +1,17 @@
+﻿{
+  "$schema": "https://aka.ms/testingplatform/schema",
+  "execution": {
+    "parallelize": true,
+    "maxParallelThreads": 0
+  },
+  "logging": {
+    "logLevel": "debug"
+  },
+  "extensions": {
+    "xunit": {
+      "showLiveOutput": true,
+      "diagnosticMessages": true,
+      "internalDiagnosticMessages": false
+    }
+  }
+}
