@@ -6,5 +6,8 @@ obj/
 .vs/
 *.user
 
+# Test files
+/test/**/*.received.*
+
 # Temp office files
 ~$*
