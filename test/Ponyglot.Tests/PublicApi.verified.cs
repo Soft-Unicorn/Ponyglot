@@ -4,6 +4,11 @@
 [assembly: System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.0", FrameworkDisplayName=".NET Standard 2.0")]
 namespace Ponyglot
 {
+    public sealed class DefaultCultureSource : Ponyglot.ICultureSource
+    {
+        public DefaultCultureSource() { }
+        public System.Globalization.CultureInfo Culture { get; set; }
+    }
     public interface ICultureSource
     {
         System.Globalization.CultureInfo Culture { get; set; }
