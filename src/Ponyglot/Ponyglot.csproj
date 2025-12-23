@@ -74,5 +74,9 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.1" />
   </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
+    <Compile Remove="PolyFills\**" />
+    <None Include="PolyFills\**" />
+  </ItemGroup>
 
 </Project>
