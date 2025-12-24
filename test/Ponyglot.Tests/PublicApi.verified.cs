@@ -31,4 +31,13 @@ namespace Ponyglot
         Ponyglot.ITranslator Create(string domain, string? context);
         Ponyglot.ITranslator Create<T>();
     }
+    public class Translator : Ponyglot.ITranslator
+    {
+        public Translator(Ponyglot.ITranslationStore translationStore, Ponyglot.ICultureSource cultureSource, string domain, string? context) { }
+        public string? Context { get; }
+        public string Domain { get; }
+        public Ponyglot.ITranslator ForCulture(System.Globalization.CultureInfo culture) { }
+        public string N(long count, string messageId, string pluralId, params object[]? args) { }
+        public string T(string messageId, params object[]? args) { }
+    }
 }
