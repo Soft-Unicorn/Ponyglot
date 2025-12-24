@@ -1,4 +1,6 @@
-﻿namespace Ponyglot;
+﻿using System;
+
+namespace Ponyglot;
 
 /// <summary>
 /// Factory used to create <see cref="ITranslator"/> instances.
@@ -22,4 +24,11 @@ public interface ITranslatorFactory
     /// <param name="context">The optional context to use when searching for translations provided by this instance.</param>
     /// <returns>A new <see cref="ITranslator"/> instance.</returns>
     ITranslator Create(string domain, string? context);
+
+    /// <summary>
+    /// Resolves the domain and context for the specified type.
+    /// </summary>
+    /// <param name="type">The type to resolve the domain and context for.</param>
+    /// <returns>A tuple containing the domain and context for the specified type.</returns>
+    (string Domain, string? Context) ResolveType(Type type);
 }

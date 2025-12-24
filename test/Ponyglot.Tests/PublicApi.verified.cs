@@ -30,6 +30,10 @@ namespace Ponyglot
     {
         Ponyglot.ITranslator Create(string domain, string? context);
         Ponyglot.ITranslator Create<T>();
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "Domain",
+                "Context"})]
+        System.ValueTuple<string, string?> ResolveType(System.Type type);
     }
     public class Translator : Ponyglot.ITranslator
     {
@@ -39,5 +43,15 @@ namespace Ponyglot
         public Ponyglot.ITranslator ForCulture(System.Globalization.CultureInfo culture) { }
         public string N(long count, string messageId, string pluralId, params object[]? args) { }
         public string T(string messageId, params object[]? args) { }
+    }
+    public class TranslatorFactory : Ponyglot.ITranslatorFactory
+    {
+        public TranslatorFactory(Ponyglot.ITranslationStore translationStore, Ponyglot.ICultureSource cultureSource) { }
+        public virtual Ponyglot.ITranslator Create(string domain, string? context) { }
+        public virtual Ponyglot.ITranslator Create<T>() { }
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "Domain",
+                "Context"})]
+        public virtual System.ValueTuple<string, string?> ResolveType(System.Type type) { }
     }
 }
