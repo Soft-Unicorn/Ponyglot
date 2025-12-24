@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace Ponyglot;
 
@@ -33,6 +35,7 @@ public interface ITranslator
     /// <remarks>
     /// <paramref name="messageId"/> can be a simple string or a message format adhering to the <see cref="string.Format(string, object[])"/> rules.
     /// </remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="messageId"/> is <c>null</c>.</exception>
     string T(string messageId, params object[]? args);
 
     /// <summary>
@@ -51,5 +54,7 @@ public interface ITranslator
     ///     The specified <paramref name="args"/> are common to the <paramref name="messageId"/> and <paramref name="pluralId"/> message formats.
     ///     </para>
     /// </remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="messageId"/> is <c>null</c>.</exception>
+    [SuppressMessage("ReSharper", "UnusedParameter.Global", Justification = "Required for code inspection and translation discovery")]
     string N(long count, string messageId, string pluralId, params object[]? args);
 }
