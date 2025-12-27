@@ -7,6 +7,9 @@
     <File Path="global.json" />
     <File Path="README.md" />
   </Folder>
+  <Folder Name="/meta/worflows/">
+    <File Path=".github/workflows/continuous-integration.yml" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/Ponyglot/Ponyglot.csproj" />
   </Folder>

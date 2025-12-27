@@ -5,6 +5,8 @@ obj/
 .idea/
 .vs/
 
+# Test output
+*.trx
 
 # Temp office files
 ~$*

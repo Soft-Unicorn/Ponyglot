@@ -17,6 +17,11 @@
     <PackageReference Include="Xunit.Combinatorial" Version="2.0.24" />
   </ItemGroup>
 
+  <PropertyGroup Condition="$(ContinuousIntegrationBuild) == 'true'">
+    <VSTestLogger>trx%3bLogFileName=tests-$(TargetFramework).trx</VSTestLogger>
+    <VSTestResultsDirectory>$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)', '..', '..', 'TestResults'))</VSTestResultsDirectory>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Update="xunit.v3.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
