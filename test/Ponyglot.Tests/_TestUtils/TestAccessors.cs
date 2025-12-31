@@ -1,4 +1,4 @@
-﻿#if NETCOREAPP
+#if NETCOREAPP
 using System.Collections.Frozen;
 #else
 using System.Collections.Generic;
@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
+using Ponyglot.Sources.PortableObject.PluralRule;
 
 namespace Ponyglot.Tests._TestUtils;
 
@@ -21,9 +23,10 @@ namespace Ponyglot.Tests._TestUtils;
 public static class TestAccessors
 {
     private static readonly ConcurrentDictionary<(Type Type, string Name), FieldInfo> FieldCache = new();
+    private static readonly ConcurrentDictionary<(Type Type, string Signature), ConstructorInfo> ConstructorCache = new();
 
     /// <summary>
-    /// Defines the test accessors for the <see cref="Translator"/> instances.
+    /// Defines the test accessors for <see cref="Translator"/> instances.
     /// </summary>
     /// <param name="translator">The <see cref="Translator"/> instance to extend.</param>
     extension(Translator translator)
@@ -41,6 +44,27 @@ public static class TestAccessors
 #endif
     }
 
+    /// <summary>
+    /// Defines extension methods for the <see cref="PluralRuleExpression"/> type.
+    /// </summary>
+    extension(PluralRuleExpression)
+    {
+        internal static PluralRuleExpression New(string symbol, PluralRuleExpression[] children, Func<long, PluralRuleExpression[], long> evaluator) =>
+            Create<PluralRuleExpression>(
+                [typeof(string), typeof(PluralRuleExpression[]), typeof(Func<long, PluralRuleExpression[], long>)],
+                [symbol, children, evaluator]);
+    }
+
+    /// <summary>
+    /// Defines the test accessors for <see cref="PluralRuleExpression"/> instances.
+    /// </summary>
+    /// <param name="expression">The <see cref="PluralRuleExpression"/> instance to extend.</param>
+    extension(PluralRuleExpression expression)
+    {
+        internal string GetSymbol() => ReadField<string>(expression, "_symbol");
+        internal PluralRuleExpression[] GetChildren() => ReadField<PluralRuleExpression[]>(expression, "_children");
+    }
+
     private static T ReadField<T>(object instance, string name)
     {
         const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
@@ -49,5 +73,18 @@ public static class TestAccessors
             key => key.Type.GetField(name, flags) ?? throw new MissingFieldException(key.Type.FullName, name));
 
         return (T)fieldInfo.GetValue(instance)!;
+    }
+
+    private static T Create<T>(Type[] argTypes, object[] argValues)
+    {
+        const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+        var signature = string.Join(", ", argTypes.Select(t => t.FullName));
+
+        var ctorInfo = ConstructorCache.GetOrAdd(
+            (typeof(T), signature),
+            key => key.Type.GetConstructor(flags, binder: null, types: argTypes, modifiers: null)
+                   ?? throw new MissingMethodException(key.Type.FullName, ".ctor"));
+
+        return (T)ctorInfo.Invoke(argValues);
     }
 }
