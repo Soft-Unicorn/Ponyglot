@@ -1,4 +1,9 @@
-﻿using System;
+﻿#if NETCOREAPP
+using System.Collections.Frozen;
+#else
+using System.Collections.Generic;
+#endif
+using System;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
@@ -25,6 +30,15 @@ public static class TestAccessors
     {
         internal ITranslationStore GetTranslationStore() => ReadField<ITranslationStore>(translator, "_translationStore");
         internal ICultureSource GetCultureSource() => ReadField<ICultureSource>(translator, "_cultureSource");
+    }
+
+    extension(TranslationStore store)
+    {
+#if NETCOREAPP
+        internal FrozenDictionary<string, FrozenDictionary<string, ICatalog>>? GetCatalogsIndex() => ReadField<FrozenDictionary<string, FrozenDictionary<string, ICatalog>>?>(store, "_catalogsIndex");
+#else
+        internal Dictionary<string, Dictionary<string, ICatalog>>? GetCatalogsIndex() => ReadField<Dictionary<string, Dictionary<string, ICatalog>>?>(store, "_catalogsIndex");
+#endif
     }
 
     private static T ReadField<T>(object instance, string name)
