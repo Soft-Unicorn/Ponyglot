@@ -15,6 +15,35 @@ namespace Ponyglot
     }
     public interface ITranslator
     {
-        void Todo();
+        string CatalogName { get; }
+        string Context { get; }
+        Ponyglot.ITranslator ForCulture(System.Globalization.CultureInfo culture);
+        string N(long count, string messageId, string pluralId, params object?[]? args);
+        string T(string messageId, params object?[]? args);
+    }
+    public class TranslationForm
+    {
+        public bool IsCompositeFormat { get; }
+        public string Message { get; }
+        public override string ToString() { }
+        public static Ponyglot.TranslationForm CompositeFormat(string message) { }
+        public static Ponyglot.TranslationForm Text(string message) { }
+    }
+    public class TranslationStore
+    {
+        public TranslationStore() { }
+        public virtual bool TryGet(string catalogName, System.Globalization.CultureInfo culture, string context, long? count, string messageId, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Ponyglot.TranslationForm? translation) { }
+    }
+    public class Translator : Ponyglot.ITranslator
+    {
+        public Translator(Ponyglot.TranslationStore translationStore, Ponyglot.ICultureSource cultureSource, string catalogName, string context) { }
+        public string CatalogName { get; }
+        public string Context { get; }
+        protected Ponyglot.ICultureSource CultureSource { get; }
+        protected Ponyglot.TranslationStore Store { get; }
+        public Ponyglot.ITranslator ForCulture(System.Globalization.CultureInfo culture) { }
+        protected virtual string GetTranslation(long? count, string messageId, string defaultMessage, object?[]? args) { }
+        public string N(long count, string messageId, string pluralId, params object?[]? args) { }
+        public string T(string messageId, params object?[]? args) { }
     }
 }
