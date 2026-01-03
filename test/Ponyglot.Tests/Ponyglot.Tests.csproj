@@ -34,6 +34,13 @@
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
   
+  <PropertyGroup>
+    <!--
+    xUnit1047:Avoid using TheoryDataRow arguments that might not be serializable
+    -->
+    <NoWarn>$(NoWarn);xUnit1047</NoWarn>
+  </PropertyGroup>
+  
   <ItemGroup>
     <Compile Remove="PublicApi.*.cs" />
     <None Update="PublicApi.*.cs">
