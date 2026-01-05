@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using Ponyglot.Sources.PortableObject.PluralRule;
 
 namespace Ponyglot.Tests._TestUtils;
 
@@ -33,5 +35,20 @@ internal static class TestAccessors
     {
         [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_translationsIndex")]
         public extern ref FrozenDictionary<string, FrozenDictionary<string, IReadOnlyList<TranslationForm>>>? GetTranslationsIndex();
+    }
+
+    extension(PluralRuleExpression)
+    {
+        [UnsafeAccessor(UnsafeAccessorKind.Constructor)]
+        public static extern PluralRuleExpression New(string symbol, PluralRuleExpression[] children, Func<long, PluralRuleExpression[], long> evaluator);
+    }
+
+    extension(PluralRuleExpression expression)
+    {
+        [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_symbol")]
+        public extern ref string GetSymbol();
+
+        [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_children")]
+        public extern ref PluralRuleExpression[] GetChildren();
     }
 }
