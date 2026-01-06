@@ -5,8 +5,9 @@ obj/
 .idea/
 .vs/
 
-# Test output
+# Tests
 *.trx
+/test/**/*.received.*
 
 # Temp office files
 ~$*
