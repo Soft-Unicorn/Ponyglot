@@ -21,6 +21,10 @@ namespace Ponyglot
         string N(long count, string messageId, string pluralId, params object?[]? args);
         string T(string messageId, params object?[]? args);
     }
+    public interface ITranslatorFactory
+    {
+        Ponyglot.ITranslator Create(string catalogName, string context);
+    }
     public class TranslationForm
     {
         public bool IsCompositeFormat { get; }
@@ -45,5 +49,22 @@ namespace Ponyglot
         protected virtual string GetTranslation(long? count, string messageId, string defaultMessage, object?[]? args) { }
         public string N(long count, string messageId, string pluralId, params object?[]? args) { }
         public string T(string messageId, params object?[]? args) { }
+    }
+    public static class TranslatorConventions
+    {
+        [return: System.Runtime.CompilerServices.TupleElementNames(new string[] {
+                "CatalogName",
+                "Context"})]
+        public static System.ValueTuple<string, string> ResolveType(System.Type type) { }
+    }
+    public class TranslatorFactory : Ponyglot.ITranslatorFactory
+    {
+        public TranslatorFactory(Ponyglot.TranslationStore translationStore, Ponyglot.ICultureSource cultureSource) { }
+        public virtual Ponyglot.ITranslator Create(string catalogName, string context) { }
+    }
+    public static class TranslatorFactoryExtensions
+    {
+        public static Ponyglot.ITranslator Create(this Ponyglot.ITranslatorFactory factory, System.Type type) { }
+        public static Ponyglot.ITranslator Create<T>(this Ponyglot.ITranslatorFactory factory) { }
     }
 }
