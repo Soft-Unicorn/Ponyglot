@@ -48,6 +48,18 @@ namespace Ponyglot
         public static Ponyglot.MessageEntry NonPlural(string context, string messageId, Ponyglot.TranslationForm translation) { }
         public static Ponyglot.MessageEntry Plural(string context, string messageId, System.Collections.Generic.IReadOnlyList<Ponyglot.TranslationForm> translations) { }
     }
+    public class PonyglotRuntime
+    {
+        public PonyglotRuntime(Ponyglot.TranslationStore translationStore, Ponyglot.ICultureSource cultureSource, System.Func<Ponyglot.TranslationStore, Ponyglot.ICultureSource, Ponyglot.ITranslatorFactory> translationFactoryProvider, System.Collections.Generic.IEnumerable<Ponyglot.Loading.ICatalogLocator> locators, System.Collections.Generic.IEnumerable<Ponyglot.Loading.ICatalogLoader> loaders) { }
+        public Ponyglot.ICultureSource CultureSource { get; }
+        public bool IsInitialized { get; }
+        public Ponyglot.TranslationStore Store { get; }
+        public Ponyglot.ITranslatorFactory TranslatorFactory { get; }
+        protected virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<Ponyglot.Loading.CatalogResource>> FindCatalogsAsync(System.Threading.CancellationToken cancellationToken) { }
+        protected virtual System.Threading.Tasks.Task<Ponyglot.Loading.ICatalogLoader> GetLoaderAsync(Ponyglot.Loading.CatalogResource resource, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task InitializeAsync(System.Threading.CancellationToken cancellationToken = default) { }
+        protected virtual System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<Ponyglot.Catalog>> LoadCatalogsAsync(System.Collections.Generic.IReadOnlyList<Ponyglot.Loading.CatalogResource> resources, System.Threading.CancellationToken cancellationToken) { }
+    }
     public class TranslationForm
     {
         public bool IsCompositeFormat { get; }
@@ -90,5 +102,24 @@ namespace Ponyglot
     {
         public static Ponyglot.ITranslator Create(this Ponyglot.ITranslatorFactory factory, System.Type type) { }
         public static Ponyglot.ITranslator Create<T>(this Ponyglot.ITranslatorFactory factory) { }
+    }
+}
+namespace Ponyglot.Loading
+{
+    public abstract class CatalogResource
+    {
+        protected CatalogResource(System.Uri uri) { }
+        public System.Uri Uri { get; }
+        public abstract System.Threading.Tasks.Task<System.IO.Stream> OpenAsync(System.Threading.CancellationToken cancellationToken = default);
+        public override string ToString() { }
+    }
+    public interface ICatalogLoader
+    {
+        System.Threading.Tasks.Task<bool> CanLoadAsync(Ponyglot.Loading.CatalogResource catalogResource, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<Ponyglot.Catalog> LoadAsync(Ponyglot.Loading.CatalogResource catalogResource, System.Threading.CancellationToken cancellationToken = default);
+    }
+    public interface ICatalogLocator
+    {
+        System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyCollection<Ponyglot.Loading.CatalogResource>> FindCatalogsAsync(System.Threading.CancellationToken cancellationToken = default);
     }
 }
