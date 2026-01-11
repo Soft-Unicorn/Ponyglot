@@ -48,6 +48,15 @@ namespace Ponyglot
         public static Ponyglot.MessageEntry NonPlural(string context, string messageId, Ponyglot.TranslationForm translation) { }
         public static Ponyglot.MessageEntry Plural(string context, string messageId, System.Collections.Generic.IReadOnlyList<Ponyglot.TranslationForm> translations) { }
     }
+    public class PonyglotRuntime
+    {
+        public PonyglotRuntime(Ponyglot.TranslationStore translationStore, Ponyglot.ICultureSource cultureSource, System.Func<Ponyglot.TranslationStore, Ponyglot.ICultureSource, Ponyglot.ITranslatorFactory> translationFactoryProvider, System.Collections.Generic.IEnumerable<Ponyglot.Sources.ICatalogSource> sources) { }
+        public Ponyglot.ICultureSource CultureSource { get; }
+        public bool IsInitialized { get; }
+        public Ponyglot.TranslationStore Store { get; }
+        public Ponyglot.ITranslatorFactory TranslatorFactory { get; }
+        public System.Threading.Tasks.Task InitializeAsync(System.Threading.CancellationToken cancellationToken = default) { }
+    }
     public class TranslationForm
     {
         public bool IsCompositeFormat { get; }
@@ -90,5 +99,12 @@ namespace Ponyglot
     {
         public static Ponyglot.ITranslator Create(this Ponyglot.ITranslatorFactory factory, System.Type type) { }
         public static Ponyglot.ITranslator Create<T>(this Ponyglot.ITranslatorFactory factory) { }
+    }
+}
+namespace Ponyglot.Sources
+{
+    public interface ICatalogSource
+    {
+        System.Collections.Generic.IAsyncEnumerable<Ponyglot.Catalog> LoadCatalogsAsync(System.Threading.CancellationToken cancellationToken = default);
     }
 }
