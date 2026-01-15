@@ -103,8 +103,28 @@ namespace Ponyglot
 }
 namespace Ponyglot.Sources
 {
+    public interface ICatalogReader
+    {
+        System.Threading.Tasks.ValueTask<Ponyglot.Catalog?> TryReadCatalogAsync(Ponyglot.Sources.StreamResource resource, System.Threading.CancellationToken cancellationToken);
+    }
     public interface ICatalogSource
     {
         System.Collections.Generic.IAsyncEnumerable<Ponyglot.Catalog> LoadCatalogsAsync(System.Threading.CancellationToken cancellationToken = default);
+    }
+    public abstract class StreamCatalogSource : Ponyglot.Sources.ICatalogSource
+    {
+        protected StreamCatalogSource(Ponyglot.Sources.ICatalogReader catalogReader) { }
+        protected abstract System.Collections.Generic.IAsyncEnumerable<Ponyglot.Sources.StreamResource> EnumerateResourcesAsync(System.Threading.CancellationToken cancellationToken = default);
+        [System.Runtime.CompilerServices.AsyncIteratorStateMachine(typeof(Ponyglot.Sources.StreamCatalogSource.<LoadCatalogsAsync>d__2))]
+        public System.Collections.Generic.IAsyncEnumerable<Ponyglot.Catalog> LoadCatalogsAsync([System.Runtime.CompilerServices.EnumeratorCancellation] System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public abstract class StreamResource
+    {
+        protected StreamResource(string uid, string name, string catalogName) { }
+        public string CatalogName { get; }
+        public string Name { get; }
+        public string Uid { get; }
+        public abstract System.Threading.Tasks.ValueTask<System.IO.Stream> OpenAsync(System.Threading.CancellationToken cancellationToken);
+        public override string ToString() { }
     }
 }
