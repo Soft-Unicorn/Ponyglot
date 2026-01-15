@@ -103,6 +103,22 @@ namespace Ponyglot
 }
 namespace Ponyglot.Sources
 {
+    public class FileSystemCatalogSource : Ponyglot.Sources.StreamCatalogSource
+    {
+        public FileSystemCatalogSource(Ponyglot.Sources.ICatalogReader catalogReader, System.IO.DirectoryInfo rootDirectory) { }
+        public FileSystemCatalogSource(Ponyglot.Sources.ICatalogReader catalogReader, System.IO.DirectoryInfo rootDirectory, Ponyglot.Sources.FileSystemCatalogSourceOptions options) { }
+        protected Ponyglot.Sources.FileSystemCatalogSourceOptions Options { get; }
+        protected System.IO.DirectoryInfo RootDirectory { get; }
+        [System.Runtime.CompilerServices.AsyncIteratorStateMachine(typeof(Ponyglot.Sources.FileSystemCatalogSource.<EnumerateResourcesAsync>d__8))]
+        protected override System.Collections.Generic.IAsyncEnumerable<Ponyglot.Sources.StreamResource> EnumerateResourcesAsync([System.Runtime.CompilerServices.EnumeratorCancellation] System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class FileSystemCatalogSourceOptions
+    {
+        public FileSystemCatalogSourceOptions() { }
+        public System.Func<System.IO.FileInfo, string>? CatalogNameResolver { get; set; }
+        public System.IO.EnumerationOptions FileSearchOptions { get; set; }
+        public System.Func<System.IO.FileInfo, bool>? Filter { get; set; }
+    }
     public interface ICatalogReader
     {
         System.Threading.Tasks.ValueTask<Ponyglot.Catalog?> TryReadCatalogAsync(Ponyglot.Sources.StreamResource resource, System.Threading.CancellationToken cancellationToken);
