@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Ponyglot.Tests._TestUtils;
@@ -33,6 +34,14 @@ public static class TestExtensionMethods
         {
             using var reader = new StreamReader(stream);
             return reader.ReadToEnd();
+        }
+    }
+
+    extension(string str)
+    {
+        public MemoryStream AsStream()
+        {
+            return new MemoryStream(Encoding.UTF8.GetBytes(str));
         }
     }
 }
