@@ -134,6 +134,41 @@ namespace Ponyglot.Sources
         public System.IO.EnumerationOptions FileSearchOptions { get; set; }
         public System.Func<System.IO.FileInfo, bool>? Filter { get; set; }
     }
+    public class HttpCatalogJsonManifestReader : Ponyglot.Sources.IHttpCatalogManifestReader
+    {
+        public HttpCatalogJsonManifestReader() { }
+        public System.Collections.Generic.IEnumerable<string> MediaTypes { get; }
+        [System.Runtime.CompilerServices.AsyncIteratorStateMachine(typeof(Ponyglot.Sources.HttpCatalogJsonManifestReader.<ReadAsync>d__4))]
+        public System.Collections.Generic.IAsyncEnumerable<string> ReadAsync(System.IO.Stream stream, [System.Runtime.CompilerServices.EnumeratorCancellation] System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class HttpCatalogSource : Ponyglot.Sources.StreamCatalogSource
+    {
+        public HttpCatalogSource(Ponyglot.Sources.ICatalogReader catalogReader, System.Net.Http.HttpClient httpClient, System.Uri manifestUri) { }
+        public HttpCatalogSource(Ponyglot.Sources.ICatalogReader catalogReader, System.Net.Http.HttpClient httpClient, System.Uri manifestUri, Ponyglot.Sources.HttpCatalogSourceOptions options) { }
+        protected System.Net.Http.HttpClient Client { get; }
+        protected System.Uri ManifestUri { get; }
+        protected Ponyglot.Sources.HttpCatalogSourceOptions Options { get; }
+        [System.Runtime.CompilerServices.AsyncIteratorStateMachine(typeof(Ponyglot.Sources.HttpCatalogSource.<EnumerateResourcesAsync>d__11))]
+        protected override System.Collections.Generic.IAsyncEnumerable<Ponyglot.Sources.StreamResource> EnumerateResourcesAsync([System.Runtime.CompilerServices.EnumeratorCancellation] System.Threading.CancellationToken cancellationToken = default) { }
+    }
+    public class HttpCatalogSourceOptions
+    {
+        public HttpCatalogSourceOptions() { }
+        public System.Func<System.Uri, string>? CatalogNameResolver { get; set; }
+        public System.Action<System.Net.Http.HttpRequestMessage>? ConfigureCatalogRequest { get; set; }
+        public System.Action<System.Net.Http.HttpRequestMessage>? ConfigureManifestRequest { get; set; }
+        public System.Func<System.Uri, bool>? Filter { get; set; }
+        public System.Collections.ObjectModel.Collection<Ponyglot.Sources.IHttpCatalogManifestReader> ManifestReaders { get; set; }
+        public int MaxCatalogs { get; set; }
+        public bool SameOrigin { get; set; }
+    }
+    public class HttpCatalogTextManifestReader : Ponyglot.Sources.IHttpCatalogManifestReader
+    {
+        public HttpCatalogTextManifestReader() { }
+        public System.Collections.Generic.IEnumerable<string> MediaTypes { get; }
+        [System.Runtime.CompilerServices.AsyncIteratorStateMachine(typeof(Ponyglot.Sources.HttpCatalogTextManifestReader.<ReadAsync>d__3))]
+        public System.Collections.Generic.IAsyncEnumerable<string> ReadAsync(System.IO.Stream stream, [System.Runtime.CompilerServices.EnumeratorCancellation] System.Threading.CancellationToken cancellationToken = default) { }
+    }
     public interface ICatalogReader
     {
         System.Threading.Tasks.ValueTask<Ponyglot.Catalog?> TryReadCatalogAsync(Ponyglot.Sources.StreamResource resource, System.Threading.CancellationToken cancellationToken);
@@ -141,6 +176,11 @@ namespace Ponyglot.Sources
     public interface ICatalogSource
     {
         System.Collections.Generic.IAsyncEnumerable<Ponyglot.Catalog> LoadCatalogsAsync(System.Threading.CancellationToken cancellationToken = default);
+    }
+    public interface IHttpCatalogManifestReader
+    {
+        System.Collections.Generic.IEnumerable<string> MediaTypes { get; }
+        System.Collections.Generic.IAsyncEnumerable<string> ReadAsync(System.IO.Stream stream, System.Threading.CancellationToken cancellationToken = default);
     }
     public abstract class StreamCatalogSource : Ponyglot.Sources.ICatalogSource
     {
