@@ -6,10 +6,11 @@ namespace Ponyglot
 {
     public class Catalog
     {
-        public Catalog() { }
+        public Catalog(string uid, string catalogName, System.Globalization.CultureInfo culture, Ponyglot.IPluralRule pluralRule, System.Collections.Generic.IEnumerable<Ponyglot.MessageEntry> entries) { }
         public virtual string CatalogName { get; }
         public virtual System.Globalization.CultureInfo Culture { get; }
         public virtual string Uid { get; }
+        public override string ToString() { }
         public virtual bool TryGet(string context, long? count, string messageId, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Ponyglot.TranslationForm? translation) { }
     }
     public sealed class DefaultCultureSource : Ponyglot.ICultureSource
@@ -20,6 +21,11 @@ namespace Ponyglot
     public interface ICultureSource
     {
         System.Globalization.CultureInfo Culture { get; set; }
+    }
+    public interface IPluralRule
+    {
+        int PluralCount { get; }
+        int GetPluralForm(long count);
     }
     public interface ITranslator
     {
@@ -32,6 +38,15 @@ namespace Ponyglot
     public interface ITranslatorFactory
     {
         Ponyglot.ITranslator Create(string catalogName, string context);
+    }
+    public class MessageEntry
+    {
+        public string Context { get; }
+        public bool IsPlural { get; }
+        public string MessageId { get; }
+        public System.Collections.Generic.IReadOnlyList<Ponyglot.TranslationForm> Translations { get; }
+        public static Ponyglot.MessageEntry NonPlural(string context, string messageId, Ponyglot.TranslationForm translation) { }
+        public static Ponyglot.MessageEntry Plural(string context, string messageId, System.Collections.Generic.IReadOnlyList<Ponyglot.TranslationForm> translations) { }
     }
     public class TranslationForm
     {

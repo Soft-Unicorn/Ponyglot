@@ -284,19 +284,18 @@ public class TranslationStoreTest
 
     internal class TestCatalog : Catalog
     {
+        private static readonly IPluralRule PluralRule = new FakePluralRule();
         private TranslationForm? _translation;
 
         public TestCatalog(string? catalogName = null, string? cultureName = null, string? uid = null)
+            : base(
+                uid: uid ?? "x-catalog-uid",
+                catalogName: catalogName ?? "x-catalog",
+                culture: new CultureInfo(cultureName ?? "qps-Ploc"),
+                pluralRule: PluralRule,
+                entries: [])
         {
-            CatalogName = catalogName ?? "x-catalog";
-            Culture = new CultureInfo(cultureName ?? "qps-Ploc");
-            Uid = uid ?? "x-catalog-uid";
         }
-
-        public override string Uid { get; }
-
-        public override string CatalogName { get; }
-        public override CultureInfo Culture { get; }
 
         public override bool TryGet(string context, long? count, string messageId, [NotNullWhen(true)] out TranslationForm? translation)
         {
@@ -311,7 +310,14 @@ public class TranslationStoreTest
             _translation = translation;
             return this;
         }
-    }
 
-    #endregion
+        private class FakePluralRule : IPluralRule
+        {
+            public static FakePluralRule Instance { get; } = new();
+            public int PluralCount => 1;
+            public int GetPluralForm(long count) => 0;
+        }
+
+        #endregion
+    }
 }
