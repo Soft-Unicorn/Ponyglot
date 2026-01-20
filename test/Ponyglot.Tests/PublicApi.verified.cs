@@ -4,6 +4,14 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Ponyglot.Tests")]
 namespace Ponyglot
 {
+    public class Catalog
+    {
+        public Catalog() { }
+        public virtual string CatalogName { get; }
+        public virtual System.Globalization.CultureInfo Culture { get; }
+        public virtual string Uid { get; }
+        public virtual bool TryGet(string context, long? count, string messageId, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Ponyglot.TranslationForm? translation) { }
+    }
     public sealed class DefaultCultureSource : Ponyglot.ICultureSource
     {
         public DefaultCultureSource() { }
@@ -36,6 +44,7 @@ namespace Ponyglot
     public class TranslationStore
     {
         public TranslationStore() { }
+        public virtual void Initialize(System.Collections.Generic.IEnumerable<Ponyglot.Catalog> catalogs) { }
         public virtual bool TryGet(string catalogName, System.Globalization.CultureInfo culture, string context, long? count, string messageId, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out Ponyglot.TranslationForm? translation) { }
     }
     public class Translator : Ponyglot.ITranslator

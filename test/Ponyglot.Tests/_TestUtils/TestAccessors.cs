@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Frozen;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Ponyglot.Tests._TestUtils;
@@ -13,5 +14,11 @@ internal static class TestAccessors
 
         [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "get_CultureSource")]
         public extern ICultureSource GetCultureSource();
+    }
+
+    extension(TranslationStore store)
+    {
+        [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_catalogsIndex")]
+        public extern ref FrozenDictionary<string, FrozenDictionary<string, Catalog>>? GetCatalogsIndex();
     }
 }
